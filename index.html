@@ -117,7 +117,7 @@
     </div>
     <div class="row">
       <div id="ocBrand">oseCalc 3000</div>
-      <button id="ocClear" class="ocBtnSmall">CE</button>
+      <button id="ocClear" class="ocBtnSmall">C</button>
     </div>
     <div class="row">
       <button id="ocNum7" class="ocNum">7</button>
@@ -155,9 +155,6 @@
       for(key in options) {
         this.options[key] = options[key];
       }
-
-      // Variable setup
-      this.resetDisplay = false;
 
       if(!document.querySelectorAll) {
         this.display('Error: Upgrade Browser');
@@ -240,12 +237,7 @@
      * Append text to the end of the current display
      */
     oseCalc.prototype.displayAppend = function(result) {
-      if(this.resetDisplay) {
-        this.display(result);
-        this.resetDisplay = false;
-      } else {
-        this.display(this.display() + '' + result);
-      }
+      this.display(this.display() + '' + result);
     };
 
     /**
@@ -253,7 +245,6 @@
      */
     oseCalc.prototype.calculate = function() {
       this.display(eval(this.display()));
-      this.resetDisplay = true;
     };
 
     /**
@@ -261,7 +252,6 @@
      */
     oseCalc.prototype.reset = function() {
       this.display('');
-      this.resetDisplay = true;
     };
 
     // Start new calculator
