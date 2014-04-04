@@ -1,0 +1,121 @@
+/**
+ * oseCalc
+ *
+ * An embeddable, extensible JavaScript calculator
+ *
+ * @author Vance Lucas <vance@vancelucas.com>
+ * @license BSD 3-clause
+ */
+
+body {
+  margin: 0;
+  padding: 0;
+}
+#oseCalc {
+  background-color: #eee;
+  width: 300px;
+  padding: 10px;
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+#oseCalc .row {
+  display: block;
+}
+#oseCalc #ocBrand {
+  float: right;
+  font-size: 12px;
+  font-family: "Terminal", monospace;
+  color: #aaa;
+  text-align: right;
+}
+#oseCalc #ocDisplay {
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  background-image: -webkit-linear-gradient(top, #ddd, #fff); /* For Chrome and Safari */
+  background-image:    -moz-linear-gradient(top, #ddd, #fff); /* For old Fx (3.6 to 15) */
+  background-image:     -ms-linear-gradient(top, #ddd, #fff); /* For pre-releases of IE 10*/
+  background-image:      -o-linear-gradient(top, #ddd, #fff); /* For old Opera (11.1 to 12.0) */
+  background-image:         linear-gradient(to bottom, #ddd, #fff); /* Standard syntax; must be last */
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  border: 1px solid #bbb;
+  text-align: right;
+  vertical-align: bottom;
+}
+#oseCalc #ocDisplay #ocDisplayEquation {
+  position: absolute;
+  top: 4;
+  right: 4;
+  color: #777;
+  overflow: hidden;
+}
+#oseCalc #ocDisplay #ocDisplayText {
+  position: absolute;
+  bottom: 4;
+  right: 4;
+}
+/* Some button styles taken from Twitter Bootstrap 3.0 */
+#oseCalc button {
+  display: inline-block;
+  width: 72px;
+  height: 60px;
+  border: 1px solid #bbb;
+  margin: 2px 0;
+  font-size: 18px;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+#oseCalc button:active {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+#oseCalc button:focus,
+#oseCalc button:active:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+#oseCalc button:hover,
+#oseCalc button:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+/* small buttons */
+#oseCalc .ocBtnSmall {
+  height: 35px;
+}
+#oseCalc #ocClear {
+  background-color: #C77028;
+}
+#oseCalc #ocClear:active,
+#oseCalc #ocClear:hover {
+  background-color: #F08730;
+}
+
+/* normal buttons */
+#oseCalc .ocNum {
+  background-color: #75C98A;
+}
+#oseCalc .ocNum:active,
+#oseCalc .ocNum:hover {
+  background-color: lightgreen;
+}
+#oseCalc .ocFunc {
+  background-color: #D6B245;
+}
+#oseCalc .ocFunc:active,
+#oseCalc .ocFunc:hover {
+  background-color: #F5CC4F;
+}
