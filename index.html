@@ -18,23 +18,33 @@
     display: block;
   }
   #oseCalc #ocBrand {
+    float: right;
     font-size: 12px;
     font-family: "Terminal", monospace;
     color: #aaa;
     text-align: right;
   }
   #oseCalc #ocDisplay {
+    position: relative;
+    overflow: hidden;
     background-color: #fff;
     background-image: -webkit-linear-gradient(top, #ddd, #fff); /* For Chrome and Safari */
     background-image:    -moz-linear-gradient(top, #ddd, #fff); /* For old Fx (3.6 to 15) */
     background-image:     -ms-linear-gradient(top, #ddd, #fff); /* For pre-releases of IE 10*/
     background-image:      -o-linear-gradient(top, #ddd, #fff); /* For old Opera (11.1 to 12.0) */
     background-image:         linear-gradient(to bottom, #ddd, #fff); /* Standard syntax; must be last */
-    height: 70px;
+    height: 50px;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 4px;
     border: 1px solid #bbb;
+    text-align: right;
+    vertical-align: bottom;
+  }
+  #oseCalc #ocDisplay #ocDisplayText {
+    position: absolute;
+    bottom: 4;
+    right: 4;
   }
   /* Some button styles taken from Twitter Bootstrap 3.0 */
   #oseCalc button {
@@ -71,6 +81,20 @@
     color: #333;
     text-decoration: none;
   }
+
+  /* small buttons */
+  #oseCalc .ocBtnSmall {
+    height: 35px;
+  }
+  #oseCalc #ocClear {
+    background-color: #C77028;
+  }
+  #oseCalc #ocClear:active,
+  #oseCalc #ocClear:hover {
+    background-color: #F08730;
+  }
+
+  /* normal buttons */
   #oseCalc .ocNum {
     background-color: #75C98A;
   }
@@ -89,8 +113,11 @@
 
   <div id="oseCalc">
     <div class="row">
-      <div id="ocDisplay"></div>
+      <div id="ocDisplay"><div id="ocDisplayText"></div></div>
+    </div>
+    <div class="row">
       <div id="ocBrand">oseCalc 3000</div>
+      <button id="ocClear" class="ocBtnSmall">CE</button>
     </div>
     <div class="row">
       <button id="ocNum7" class="ocNum">7</button>
@@ -108,14 +135,140 @@
       <button id="ocNum1" class="ocNum">1</button>
       <button id="ocNum2" class="ocNum">2</button>
       <button id="ocNum3" class="ocNum">3</button>
-      <button id="ocFuncMultiply" class="ocFunc">x</button>
+      <button id="ocFuncMultiply" data-value="*" class="ocFunc">x</button>
     </div>
     <div class="row">
       <button id="ocNum0" class="ocNum">0</button>
       <button id="ocNumDecimal" class="ocNum">.</button>
-      <button id="ocFuncEquals" class="ocFunc">=</button>
+      <button id="ocFuncEquals" class="ocEquals">=</button>
       <button id="ocFuncDivide" data-value="/" class="ocFunc">&divide;</button>
     </div>
   </div>
+
+  <script>
+    // oseCalc
+    function oseCalc(options) {
+      // Options setup
+      this.options = {
+        debug: false
+      };
+      for(key in options) {
+        this.options[key] = options[key];
+      }
+
+      // Variable setup
+      this.resetDisplay = false;
+
+      if(!document.querySelectorAll) {
+        this.display('Error: Upgrade Browser');
+        return;
+      }
+
+      this.bindElements('#oseCalc button.ocNum', this.onClickNumber);
+      this.bindElements('#oseCalc button.ocFunc', this.onClickFunction);
+      document.getElementById('ocFuncEquals').addEventListener('click', this.calculate.bind(this));
+      document.getElementById('ocClear').addEventListener('click', this.reset.bind(this));
+    }
+
+    // oseCalc Prototype
+    oseCalc.prototype.bindElements = function(selector, fn) {
+      var i;
+      var el;
+      var numbers = document.querySelectorAll(selector);
+      var numLength = numbers.length;
+      if(numLength > 0) {
+        for(i = 0; i < numLength; i++) {
+          el = numbers[i];
+          el.addEventListener('click', fn.call(this, el));
+        }
+      }
+    };
+
+    /**
+     * Handle number click events
+     */
+    oseCalc.prototype.onClickNumber = function(el) {
+      return function(e) {
+        var value = e.target.innerHTML;
+        if(this.options.debug) {
+          this.log('Clicked Number: ' + value);
+        }
+        this.displayAppend(value);
+      }.bind(this);
+    };
+
+    /**
+     * Handle function click events
+     */
+    oseCalc.prototype.onClickFunction = function(el) {
+      return function(e) {
+        var value = e.target.innerHTML;
+        // Value override with 'data-value' attribute (for division)
+        if(typeof e.target.attributes['data-value'] != "undefined") {
+          value = e.target.attributes['data-value'].value;
+        }
+        if(this.options.debug) {
+          this.log('Clicked Function: ' + value);
+        }
+        this.displayAppend(value);
+      }.bind(this);
+    };
+
+    /**
+     * Log messages (mostly for debugging purposes)
+     */
+    oseCalc.prototype.log = function(msg) {
+      if (typeof console != "undefined") {
+        console.log(msg);
+      }
+    };
+
+    /**
+     * Get or set calculator display to the given text
+     *
+     * @return string
+     */
+    oseCalc.prototype.display = function(result) {
+      if(typeof result == "undefined") {
+        return document.getElementById('ocDisplayText').innerHTML;
+      }
+      document.getElementById('ocDisplayText').innerHTML = result;
+      return result;
+    };
+
+    /**
+     * Append text to the end of the current display
+     */
+    oseCalc.prototype.displayAppend = function(result) {
+      if(this.resetDisplay) {
+        this.display(result);
+        this.resetDisplay = false;
+      } else {
+        this.display(this.display() + '' + result);
+      }
+    };
+
+    /**
+     * Calculate answer based on input formula
+     */
+    oseCalc.prototype.calculate = function() {
+      this.display(eval(this.display()));
+      this.resetDisplay = true;
+    };
+
+    /**
+     * Reset calcultor state (clear memory)
+     */
+    oseCalc.prototype.reset = function() {
+      this.display('');
+      this.resetDisplay = true;
+    };
+
+    // Start new calculator
+    ocCalc = new oseCalc({
+      debug: true
+    });
+
+  </script>
 </body>
 </html>
