@@ -7,27 +7,23 @@
  * @license BSD 3-clause
  */
 
-body {
-  margin: 0;
-  padding: 0;
-}
-#oseCalc {
+#oseCalcContainer {
   background-color: #eee;
   width: 300px;
   padding: 10px;
   font-family: "Helvetica", "Arial", sans-serif;
 }
-#oseCalc .row {
+#oseCalcContainer .ocRow {
   display: block;
 }
-#oseCalc #ocBrand {
+#oseCalcContainer #ocBrand {
   float: right;
   font-size: 12px;
   font-family: "Terminal", monospace;
   color: #aaa;
   text-align: right;
 }
-#oseCalc #ocDisplay {
+#oseCalcContainer #ocDisplay {
   position: relative;
   overflow: hidden;
   background-color: #fff;
@@ -44,20 +40,20 @@ body {
   text-align: right;
   vertical-align: bottom;
 }
-#oseCalc #ocDisplay #ocDisplayEquation {
+#oseCalcContainer #ocDisplay #ocDisplayEquation {
   position: absolute;
   top: 4;
   right: 4;
   color: #777;
   overflow: hidden;
 }
-#oseCalc #ocDisplay #ocDisplayText {
+#oseCalcContainer #ocDisplay #ocDisplayText {
   position: absolute;
   bottom: 4;
   right: 4;
 }
 /* Some button styles taken from Twitter Bootstrap 3.0 */
-#oseCalc button {
+#oseCalcContainer button {
   display: inline-block;
   width: 72px;
   height: 60px;
@@ -74,48 +70,48 @@ body {
       -ms-user-select: none;
           user-select: none;
 }
-#oseCalc button:active {
+#oseCalcContainer button:active {
   background-image: none;
   outline: 0;
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
           box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 }
-#oseCalc button:focus,
-#oseCalc button:active:focus {
+#oseCalcContainer button:focus,
+#oseCalcContainer button:active:focus {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
-#oseCalc button:hover,
-#oseCalc button:focus {
+#oseCalcContainer button:hover,
+#oseCalcContainer button:focus {
   color: #333;
   text-decoration: none;
 }
 
 /* small buttons */
-#oseCalc .ocBtnSmall {
+#oseCalcContainer .ocBtnSmall {
   height: 35px;
 }
-#oseCalc #ocClear {
+#oseCalcContainer #ocClear {
   background-color: #C77028;
 }
-#oseCalc #ocClear:active,
-#oseCalc #ocClear:hover {
+#oseCalcContainer #ocClear:active,
+#oseCalcContainer #ocClear:hover {
   background-color: #F08730;
 }
 
 /* normal buttons */
-#oseCalc .ocNum {
+#oseCalcContainer .ocNum {
   background-color: #75C98A;
 }
-#oseCalc .ocNum:active,
-#oseCalc .ocNum:hover {
+#oseCalcContainer .ocNum:active,
+#oseCalcContainer .ocNum:hover {
   background-color: lightgreen;
 }
-#oseCalc .ocFunc {
+#oseCalcContainer .ocFunc {
   background-color: #D6B245;
 }
-#oseCalc .ocFunc:active,
-#oseCalc .ocFunc:hover {
+#oseCalcContainer .ocFunc:active,
+#oseCalcContainer .ocFunc:hover {
   background-color: #F5CC4F;
 }

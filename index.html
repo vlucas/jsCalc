@@ -4,51 +4,14 @@
   <link rel="stylesheet" type="text/css" href="oseCalc.css" />
 </head>
 <body>
-  <div id="oseCalc">
-    <div class="row">
-      <div id="ocDisplay">
-        <div id="ocDisplayEquation"></div>
-        <div id="ocDisplayText"></div>
-      </div>
-    </div>
-    <div class="row">
-      <div id="ocBrand">oseCalc 3000</div>
-      <button id="ocClear" class="ocBtnSmall">C</button>
-    </div>
-    <div class="row">
-      <button id="ocNum7" class="ocNum">7</button>
-      <button id="ocNum8" class="ocNum">8</button>
-      <button id="ocNum9" class="ocNum">9</button>
-      <button id="ocFuncPlus" class="ocFunc">+</button>
-    </div>
-    <div class="row">
-      <button id="ocNum4" class="ocNum">4</button>
-      <button id="ocNum5" class="ocNum">5</button>
-      <button id="ocNum6" class="ocNum">6</button>
-      <button id="ocFuncMinus" class="ocFunc">-</button>
-    </div>
-    <div class="row">
-      <button id="ocNum1" class="ocNum">1</button>
-      <button id="ocNum2" class="ocNum">2</button>
-      <button id="ocNum3" class="ocNum">3</button>
-      <button id="ocFuncMultiply" data-value="*" class="ocFunc">x</button>
-    </div>
-    <div class="row">
-      <button id="ocNum0" class="ocNum">0</button>
-      <button id="ocNumDecimal" class="ocNum">.</button>
-      <button id="ocFuncEquals" class="ocEquals">=</button>
-      <button id="ocFuncDivide" data-value="/" class="ocFunc">&divide;</button>
-    </div>
-    <div class="row" id="ocCustomOperations">
-    </div>
-  </div>
 
   <script src="oseCalc.js"></script>
+  <div id="oseCalc"></div>
   <script>
     var calc = new oseCalc({
       debug: true
     });
-    calc.setDomRoot('#oseCalc');
+    calc.init('#oseCalc');
   </script>
 </body>
 </html>

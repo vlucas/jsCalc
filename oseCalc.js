@@ -19,32 +19,65 @@ function oseCalc(options) {
 
   // Variable setup
   this.rootSelector;
-  this.displayText;
+  this.displayText = '';
 }
 
-/**
- * Bind DOM elements to given curry function
- */
-oseCalc.prototype.setDomRoot = function(rootSelector) {
-  this.rootSelector = rootSelector;
-
-  if(this.options.debug) {
-    this.log('setDomRoot(' + rootSelector + ')');
+oseCalc.prototype.ajaxLoad = function(url, callback, errorCallback) {
+  var xmlhttp;
+  var obj = this;
+  // compatible with IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function(e) {
+    if (xmlhttp.readyState == 4) {
+      if (xmlhttp.status == 200) {
+        var templateContent = xmlhttp.responseText
+        callback.call(obj, templateContent);
+      } else {
+        errorCallback.call(obj);
+      }
+    }
   }
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+};
 
+/**
+ * Initialize calculator at given CSS selector
+ */
+oseCalc.prototype.init = function(rootSelector) {
   // Browser must have "document.querySelectorAll" support
   if(!document.querySelectorAll) {
     this.display('ERROR: Upgrade Browser');
     return;
   }
 
-  // Bindings for numbers and functions
-  this.bindElements(rootSelector + ' button.ocNum', this.onClickNumber);
-  this.bindElements(rootSelector + ' button.ocFunc', this.onClickFunction);
+  // Save root element
+  this.rootElement = document.querySelector(rootSelector);
+  if(this.rootElement === null) {
+    alert('oseCalc ERROR: Root element not found via given selector: ' + rootSelector);
+    return;
+  }
 
-  // Equals and Clear operations are special
-  document.getElementById('ocFuncEquals').addEventListener('click', this.calculate.bind(this));
-  document.getElementById('ocClear').addEventListener('click', this.reset.bind(this));
+  if(this.options.debug) {
+    this.log('setDomRoot(' + rootSelector + ')');
+  }
+
+  this.rootElement.innerHTML = '[ Loading calculator... ]';
+  this.ajaxLoad('oscCalc.html', function(html) {
+    // Success
+    this.rootElement.innerHTML = html;
+
+    // Bindings for numbers and functions
+    this.bindElements(rootSelector + ' button.ocNum', this.onClickNumber);
+    this.bindElements(rootSelector + ' button.ocFunc', this.onClickFunction);
+
+    // Equals and Clear operations are special
+    this.rootElement.querySelector('#ocFuncEquals').addEventListener('click', this.calculate.bind(this));
+    this.rootElement.querySelector('#ocClear').addEventListener('click', this.reset.bind(this));
+  }, function() {
+    // Error
+    this.rootElement.innerHTML = '[ ERROR: Bad response from server ]';
+  });
 };
 
 /**
@@ -70,7 +103,7 @@ oseCalc.prototype.onClickNumber = function(el) {
   return function(e) {
     var value = e.target.innerHTML;
     if(this.options.debug) {
-      this.log('Clicked Number: ' + value);
+      this.log('Number: ' + value);
     }
     this.displayAppend(value);
   }.bind(this);
@@ -87,7 +120,7 @@ oseCalc.prototype.onClickFunction = function(el) {
       value = e.target.attributes['data-value'].value;
     }
     if(this.options.debug) {
-      this.log('Clicked Function: ' + value);
+      this.log('Function: ' + value);
     }
     this.displayAppend(value);
   }.bind(this);
@@ -110,16 +143,13 @@ oseCalc.prototype.log = function(msg) {
 oseCalc.prototype.display = function(result) {
   var el = document.getElementById('ocDisplayText');
   if(typeof result == "undefined") {
-    if(el && el.length) {
-      return el.innerHTML;
-    }
     return this.displayText;
   }
   this.displayText = result;
-  if(el && el.length) {
+  if(el) {
     el.innerHTML = this.displayText;
   }
-  return result;
+  return this.displayText;
 };
 
 /**
@@ -134,7 +164,7 @@ oseCalc.prototype.displayAppend = function(result) {
  */
 oseCalc.prototype.displayEquation = function(result) {
   var el = document.getElementById('ocDisplayEquation');
-  if(el && el.length) {
+  if(el) {
     el.innerHTML = result;
   }
   return result;
@@ -164,8 +194,3 @@ oseCalc.prototype.reset = function() {
   this.display('');
 };
 
-
-// Module exports for node.js test runner
-if(typeof module != "undefined" && typeof module.exports != "undefined") {
-  module.exports.oseCalc = oseCalc;
-}
