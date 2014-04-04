@@ -17,22 +17,39 @@ function oseCalc(options) {
     this.options[key] = options[key];
   }
 
+  // Variable setup
+  this.rootSelector;
+  this.displayText;
+}
+
+/**
+ * Bind DOM elements to given curry function
+ */
+oseCalc.prototype.setDomRoot = function(rootSelector) {
+  this.rootSelector = rootSelector;
+
+  if(this.options.debug) {
+    this.log('setDomRoot(' + rootSelector + ')');
+  }
+
   // Browser must have "document.querySelectorAll" support
   if(!document.querySelectorAll) {
-    this.display('Error: Upgrade Browser');
+    this.display('ERROR: Upgrade Browser');
     return;
   }
 
   // Bindings for numbers and functions
-  this.bindElements('#oseCalc button.ocNum', this.onClickNumber);
-  this.bindElements('#oseCalc button.ocFunc', this.onClickFunction);
+  this.bindElements(rootSelector + ' button.ocNum', this.onClickNumber);
+  this.bindElements(rootSelector + ' button.ocFunc', this.onClickFunction);
 
   // Equals and Clear operations are special
   document.getElementById('ocFuncEquals').addEventListener('click', this.calculate.bind(this));
   document.getElementById('ocClear').addEventListener('click', this.reset.bind(this));
-}
+};
 
-// oseCalc Prototype
+/**
+ * Bind DOM elements to given curry function
+ */
 oseCalc.prototype.bindElements = function(selector, fn) {
   var i;
   var el;
@@ -91,10 +108,17 @@ oseCalc.prototype.log = function(msg) {
  * @return string
  */
 oseCalc.prototype.display = function(result) {
+  var el = document.getElementById('ocDisplayText');
   if(typeof result == "undefined") {
-    return document.getElementById('ocDisplayText').innerHTML;
+    if(el && el.length) {
+      return el.innerHTML;
+    }
+    return this.displayText;
   }
-  document.getElementById('ocDisplayText').innerHTML = result;
+  this.displayText = result;
+  if(el && el.length) {
+    el.innerHTML = this.displayText;
+  }
   return result;
 };
 
@@ -109,7 +133,10 @@ oseCalc.prototype.displayAppend = function(result) {
  * Set the equation display
  */
 oseCalc.prototype.displayEquation = function(result) {
-  document.getElementById('ocDisplayEquation').innerHTML = result;
+  var el = document.getElementById('ocDisplayEquation');
+  if(el && el.length) {
+    el.innerHTML = result;
+  }
   return result;
 };
 
@@ -118,8 +145,15 @@ oseCalc.prototype.displayEquation = function(result) {
  */
 oseCalc.prototype.calculate = function() {
   var equation = this.display();
+  var result;
+  try {
+    result = eval(equation);
+  } catch(e) {
+    result = 'ERROR: Bad Input';
+  }
   this.displayEquation(equation);
-  this.display(eval(equation));
+  this.display(result);
+  return result;
 };
 
 /**
@@ -130,3 +164,8 @@ oseCalc.prototype.reset = function() {
   this.display('');
 };
 
+
+// Module exports for node.js test runner
+if(typeof module != "undefined" && typeof module.exports != "undefined") {
+  module.exports.oseCalc = oseCalc;
+}
