@@ -39,5 +39,11 @@ describe('Calculator Equations', function() {
     expect(calc.calculate()).toBe('ERROR: Bad Input');
   });
 
+  it('should register custom function operators', function() {
+    calc.addButtonOperator('mod', '%');
+    calc.display('5%2');
+    expect(calc.calculate()).toBe(1);
+  });
+
 });
 

@@ -5,6 +5,7 @@
 </head>
 <body>
 
+  <h1>Standard Calculator</h1>
   <script src="oseCalc.js"></script>
   <div id="oseCalc"></div>
   <script>
@@ -12,6 +13,17 @@
       debug: true
     });
     calc.init('#oseCalc');
+  </script>
+
+  <h1>Calculator With Custom Operator Button</h1>
+  <script src="oseCalc.js"></script>
+  <div id="oseCalc2"></div>
+  <script>
+    var calc = new oseCalc({
+      debug: true
+    });
+    calc.init('#oseCalc2');
+    calc.addButtonOperator('mod', '%');
   </script>
 </body>
 </html>

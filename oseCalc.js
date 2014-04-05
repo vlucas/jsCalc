@@ -20,6 +20,7 @@ function oseCalc(options) {
   // Variable setup
   this.rootSelector;
   this.displayText = '';
+  this.onLoadCallbacks = [];
 }
 
 oseCalc.prototype.ajaxLoad = function(url, callback, errorCallback) {
@@ -72,8 +73,14 @@ oseCalc.prototype.init = function(rootSelector) {
     this.bindElements(rootSelector + ' button.ocFunc', this.onClickFunction);
 
     // Equals and Clear operations are special
-    this.rootElement.querySelector('#ocFuncEquals').addEventListener('click', this.calculate.bind(this));
-    this.rootElement.querySelector('#ocClear').addEventListener('click', this.reset.bind(this));
+    this.rootElement.querySelector('.ocEquals').addEventListener('click', this.calculate.bind(this));
+    this.rootElement.querySelector('.ocClear').addEventListener('click', this.reset.bind(this));
+
+    // Call all onLoadCallbacks
+    var cbLen = this.onLoadCallbacks.length;
+    for(var i = 0; i < cbLen; i++) {
+      this.onLoadCallbacks[i].call(this);
+    }
   }, function() {
     // Error
     this.rootElement.innerHTML = '[ ERROR: Bad response from server ]';
@@ -127,6 +134,19 @@ oseCalc.prototype.onClickFunction = function(el) {
 };
 
 /**
+ * Add function operator button
+ */
+oseCalc.prototype.addButtonOperator = function(label, operator) {
+  this.onLoadCallbacks.push(function() {
+    // Add button to HTML page
+    var el = this.rootElement.querySelector('.ocCustomOperations');
+    el.innerHTML = el.innerHTML + "\n" + '<button data-value="'+operator+'" class="ocFunc">'+label+'</button>';
+    // Bind button to click handler
+    el.addEventListener('click', this.onClickFunction.call(this));
+  });
+};
+
+/**
  * Log messages (mostly for debugging purposes)
  */
 oseCalc.prototype.log = function(msg) {
@@ -141,13 +161,15 @@ oseCalc.prototype.log = function(msg) {
  * @return string
  */
 oseCalc.prototype.display = function(result) {
-  var el = document.getElementById('ocDisplayText');
   if(typeof result == "undefined") {
     return this.displayText;
   }
   this.displayText = result;
-  if(el) {
-    el.innerHTML = this.displayText;
+  if (this.rootElement) {
+    var el = this.rootElement.querySelector('.ocDisplayText');
+    if(el !== null) {
+      el.innerHTML = this.displayText;
+    }
   }
   return this.displayText;
 };
@@ -163,9 +185,11 @@ oseCalc.prototype.displayAppend = function(result) {
  * Set the equation display
  */
 oseCalc.prototype.displayEquation = function(result) {
-  var el = document.getElementById('ocDisplayEquation');
-  if(el) {
-    el.innerHTML = result;
+  if (this.rootElement) {
+    var el = this.rootElement.querySelector('.ocDisplayEquation');
+    if(el !== null) {
+      el.innerHTML = result;
+    }
   }
   return result;
 };
