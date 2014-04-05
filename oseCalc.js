@@ -64,7 +64,7 @@ oseCalc.prototype.init = function(rootSelector) {
   }
 
   this.rootElement.innerHTML = '[ Loading calculator... ]';
-  this.ajaxLoad('oscCalc.html', function(html) {
+  this.ajaxLoad('oseCalc.html', function(html) {
     // Success
     this.rootElement.innerHTML = html;
 

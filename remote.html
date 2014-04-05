@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>oseCalc - Embeddable Javascript Calculator</title>
+</head>
+<body>
+
+  <h1>Embedded from Remote Server</h1>
+  <script src="http://jscalc.sitestall.com/oseCalc.js"></script>
+  <div id="oseCalc"></div>
+  <script>
+    var calc = new oseCalc({
+      debug: true
+    });
+    calc.init('#oseCalc');
+  </script>
+
+</body>
+</html>
+
