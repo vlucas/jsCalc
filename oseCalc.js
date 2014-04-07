@@ -45,22 +45,28 @@ oseCalc.prototype.ajaxLoad = function(url, callback, errorCallback) {
 /**
  * Initialize calculator at given CSS selector
  */
-oseCalc.prototype.init = function(rootSelector) {
+oseCalc.prototype.init = function(rootId) {
   // Browser must have "document.querySelectorAll" support
+  this.supportedBrowser = true;
   if(!document.querySelectorAll) {
     this.display('ERROR: Upgrade Browser');
+    this.supportedBrowser = false;
     return;
   }
 
+  // Fix retarded IE 10 issues like this b/c conditional comments were removed
+  var doc = document.documentElement;
+  doc.setAttribute('data-useragent', navigator.userAgent);
+
   // Save root element
-  this.rootElement = document.querySelector(rootSelector);
-  if(this.rootElement === null) {
-    alert('oseCalc ERROR: Root element not found via given selector: ' + rootSelector);
+  this.rootElement = document.getElementById(rootId);
+  if(!this.rootElement) {
+    alert('oseCalc ERROR: Root element not found via given element ID: ' + rootId);
     return;
   }
 
   if(this.options.debug) {
-    this.log('setDomRoot(' + rootSelector + ')');
+    this.log('setDomRoot(' + rootId + ')');
   }
 
   this.rootElement.innerHTML = '[ Loading calculator... ]';
@@ -68,18 +74,20 @@ oseCalc.prototype.init = function(rootSelector) {
     // Success
     this.rootElement.innerHTML = html;
 
-    // Bindings for numbers and functions
-    this.bindElements(rootSelector + ' button.ocNum', this.onClickNumber);
-    this.bindElements(rootSelector + ' button.ocFunc', this.onClickFunction);
+    if(this.supportedBrowser) {
+      // Bindings for numbers and functions
+      this.bindElements('button.ocNum', this.onClickNumber);
+      this.bindElements('button.ocFunc', this.onClickFunction);
 
-    // Equals and Clear operations are special
-    this.rootElement.querySelector('.ocEquals').addEventListener('click', this.calculate.bind(this));
-    this.rootElement.querySelector('.ocClear').addEventListener('click', this.reset.bind(this));
+      // Equals and Clear operations are special
+      this.rootElement.querySelector('.ocEquals').addEventListener('click', this.calculate.bind(this));
+      this.rootElement.querySelector('.ocClear').addEventListener('click', this.reset.bind(this));
 
-    // Call all onLoadCallbacks
-    var cbLen = this.onLoadCallbacks.length;
-    for(var i = 0; i < cbLen; i++) {
-      this.onLoadCallbacks[i].call(this);
+      // Call all onLoadCallbacks
+      var cbLen = this.onLoadCallbacks.length;
+      for(var i = 0; i < cbLen; i++) {
+        this.onLoadCallbacks[i].call(this);
+      }
     }
   }, function() {
     // Error
@@ -93,7 +101,7 @@ oseCalc.prototype.init = function(rootSelector) {
 oseCalc.prototype.bindElements = function(selector, fn) {
   var i;
   var el;
-  var numbers = document.querySelectorAll(selector);
+  var numbers = this.rootElement.querySelectorAll(selector);
   var numLength = numbers.length;
   if(numLength > 0) {
     for(i = 0; i < numLength; i++) {

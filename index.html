@@ -1,6 +1,9 @@
 <html>
 <head>
   <title>oseCalc - Embeddable Javascript Calculator</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -11,7 +14,7 @@
     var calc = new oseCalc({
       debug: true
     });
-    calc.init('#oseCalc');
+    calc.init('oseCalc');
   </script>
 
   <h1>Calculator With Custom Operator Button</h1>
@@ -21,7 +24,7 @@
     var calc = new oseCalc({
       debug: true
     });
-    calc.init('#oseCalc2');
+    calc.init('oseCalc2');
     calc.addButtonOperator('mod', '%');
   </script>
 </body>

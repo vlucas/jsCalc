@@ -15,6 +15,7 @@
 }
 .oseCalcContainer .ocRow {
   display: block;
+  clear: both;
 }
 .oseCalcContainer .ocBrand {
   float: right;
@@ -41,21 +42,27 @@
   vertical-align: bottom;
 }
 .oseCalcContainer .ocDisplay .ocDisplayEquation {
+  display: block;
   position: absolute;
   top: 4;
   right: 4;
   color: #777;
   overflow: hidden;
+  text-align: right;
+  vertical-align: bottom;
 }
 .oseCalcContainer .ocDisplay .ocDisplayText {
+  display: block;
   position: absolute;
   bottom: 4;
   right: 4;
+  text-align: right;
+  vertical-align: bottom;
 }
 /* Some button styles taken from Twitter Bootstrap 3.0 */
 .oseCalcContainer button {
   display: inline-block;
-  width: 72px;
+  width: 71px;
   height: 60px;
   border: 1px solid #bbb;
   margin: 2px 0;
@@ -114,4 +121,12 @@
 .oseCalcContainer .ocFunc:active,
 .oseCalcContainer .ocFunc:hover {
   background-color: #F5CC4F;
+}
+
+/* Fix IE 10 shenanigans with display */
+html[data-useragent*='MSIE 10.0'] .oseCalcContainer .ocDisplay .ocDisplayText {
+  position: absolute;
+  top: 0;
+  margin-top: 22px;
+  right: 4;
 }

@@ -1,0 +1,34 @@
+/**
+ * oseCalc IE Stylesheet
+ *
+ * An embeddable, extensible JavaScript calculator
+ *
+ * @author Vance Lucas <vance@vancelucas.com>
+ * @license BSD 3-clause
+ */
+.oseCalcContainer {
+  background-color: #eee;
+  width: 300px;
+  padding: 10px;
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+.oseCalcContainer .ocDisplay .ocDisplayEquation {
+  width: 100%;
+  text-align: right;
+  vertical-align: bottom;
+}
+.oseCalcContainer .ocDisplay .ocDisplayText {
+  width: 100%;
+  margin-top: 22px;
+  text-align: right;
+  vertical-align: bottom;
+}
+.oseCalcContainer button {
+  display: block;
+  float: left;
+  width: 72px;
+  height: 60px;
+  border: 1px solid #bbb;
+  padding: 0 2px 0 0;
+  margin: 2px 0;
+}
